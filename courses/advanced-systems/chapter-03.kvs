@@ -2,7 +2,11 @@
 course_id: "advanced-systems"
 chapter: 3
 title: "Lock-Free Data Structures"
-bloom_level: "create"
+difficulty: "advanced"
+date_created: "2026-06-05"
+date_updated: "2026-06-18"
+creator: "Kvasir Team"
+description: "Explore compare-and-swap primitives, lock-free stacks, and the ABA problem in concurrent programming."
 ---
 
 # Lock-Free Data Structures

@@ -2,7 +2,11 @@
 course_id: "advanced-systems"
 chapter: 4
 title: "Cache-Oblivious Algorithms"
-bloom_level: "create"
+difficulty: "advanced"
+date_created: "2026-06-08"
+date_updated: "2026-06-20"
+creator: "Kvasir Team"
+description: "Design algorithms that minimize cache misses without knowing cache parameters, using recursive blocking and Z-order curves."
 ---
 
 # Cache-Oblivious Algorithms
@@ -30,14 +34,14 @@ Optimize for **cache line usage** (typically 64 bytes). When memory is accessed,
 for (i = 0; i < N; i++)
     for (j = 0; j < N; j++)
         for (k = 0; k < N; k++)
-            C[i][j] += A[i][k] * B[k][j];  // B accessed column-wise → cache misses!
+            C[i][j] += A[i][k] * B[k][j];
 ```
 
 **Cache-oblivious** (recursive blocking):
 
 ```c
 void multiply(int N, int A[N][N], int B[N][N], int C[N][N]) {
-    if (N <= 32) {  // base case fits in cache
+    if (N <= 32) {
         for (i = 0; i < N; i++)
             for (j = 0; j < N; j++)
                 for (k = 0; k < N; k++)
@@ -45,7 +49,6 @@ void multiply(int N, int A[N][N], int B[N][N], int C[N][N]) {
         return;
     }
     int half = N / 2;
-    // Recurse on 8 sub-blocks
     multiply(half, A[0][0], B[0][0], C[0][0]);
     multiply(half, A[0][0], B[0][half], C[0][half]);
     // ... (6 more recursive calls)

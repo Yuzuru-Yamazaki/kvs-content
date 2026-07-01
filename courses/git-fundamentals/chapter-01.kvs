@@ -1,0 +1,64 @@
+---
+course_id: "git-fundamentals"
+chapter: 1
+title: "Basic Git Commands"
+difficulty: "beginner"
+date_created: "2026-06-01"
+date_updated: "2026-06-03"
+creator: "Kvasir Team"
+description: "Learn to initialize repositories, stage changes, commit, and view history."
+---
+
+# Basic Git Commands
+
+Git tracks changes to your files over time, letting you travel back to any previous state.
+
+## Setting Up
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+```
+
+## Creating a Repository
+
+```bash
+mkdir my-project
+cd my-project
+git init               # create a new repo
+```
+
+## The Basic Workflow
+
+```bash
+echo "# My Project" > README.md
+git status             # see what's changed
+git add README.md      # stage the file
+git commit -m "Initial commit"   # save the snapshot
+```
+
+## Viewing History
+
+```bash
+git log                # show commit history
+git log --oneline      # compact view
+git diff               # see unstaged changes
+```
+
+### The Three States
+
+```
+Working Directory → Staging Area → Repository
+     (modified)       (staged)      (committed)
+```
+
+## Practice
+
+Create a new Git repository, add a file with your name and a short bio, commit it, then view the log.
+
+:::project{environment="node" template="git-basics-lab"}
+
+### Objective
+
+Initialize a repo, make three commits adding different files, then view the history using `git log --oneline --graph`.
+:::

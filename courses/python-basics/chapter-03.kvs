@@ -1,0 +1,69 @@
+---
+course_id: "python-basics"
+chapter: 3
+title: "File I/O and Modules"
+difficulty: "beginner"
+date_created: "2026-06-02"
+date_updated: "2026-06-05"
+creator: "Kvasir Team"
+description: "Read and write files, import modules, and organize code into reusable components."
+---
+
+# File I/O and Modules
+
+## Reading Files
+
+```python
+# Read entire file
+with open("data.txt", "r") as f:
+    content = f.read()
+
+# Read line by line
+with open("data.txt", "r") as f:
+    for line in f:
+        print(line.strip())
+```
+
+## Writing Files
+
+```python
+with open("output.txt", "w") as f:
+    f.write("Hello, file!\n")
+
+with open("log.txt", "a") as f:
+    f.write("Appended line\n")
+```
+
+## Importing Modules
+
+```python
+import math
+import random
+from datetime import datetime
+
+print(math.sqrt(16))          # 4.0
+print(random.randint(1, 6))   # random dice roll
+print(datetime.now())         # current time
+```
+
+## Challenge
+
+Write a program that reads a file of numbers (one per line), computes the sum and average, and writes the result to a new file.
+
+```python
+# Input: numbers.txt
+# 10
+# 20
+# 30
+#
+# Output: result.txt
+# Sum: 60
+# Average: 20.0
+```
+
+:::project{environment="node" template="file-io-lab"}
+
+### Objective
+
+Create a program that reads a CSV file of student grades, computes each student's average, and writes a report sorted by highest average.
+:::

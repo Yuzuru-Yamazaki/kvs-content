@@ -1,0 +1,64 @@
+---
+course_id: "data-structures"
+chapter: 3
+title: "Binary Search Trees"
+difficulty: "intermediate"
+date_created: "2026-06-06"
+date_updated: "2026-06-12"
+creator: "Kvasir Team"
+description: "Implement BST operations: insert, search, delete, and traversals (inorder, preorder, postorder)."
+---
+
+# Binary Search Trees
+
+A BST is a tree where each node has at most two children, and left < parent < right.
+
+## Node Structure
+
+```c
+typedef struct tree_node {
+    int data;
+    struct tree_node *left;
+    struct tree_node *right;
+} tree_node_t;
+```
+
+## Search
+
+```c
+tree_node_t *search(tree_node_t *root, int target) {
+    if (root == NULL || root->data == target)
+        return root;
+
+    if (target < root->data)
+        return search(root->left, target);
+    else
+        return search(root->right, target);
+}
+```
+
+## Traversals
+
+```c
+void inorder(tree_node_t *root) {
+    if (root == NULL) return;
+    inorder(root->left);
+    printf("%d ", root->data);
+    inorder(root->right);
+}
+// Prints sorted order!
+```
+
+## Challenge
+
+Implement `delete(root, value)` which handles three cases:
+1. Node is a leaf
+2. Node has one child
+3. Node has two children (replace with in-order successor)
+
+:::project{environment="node" template="bst-lab"}
+
+### Objective
+
+Implement a complete BST with insert, search, delete, min/max, and three traversal methods. Test it by inserting 10 random numbers and printing them in sorted order.
+:::

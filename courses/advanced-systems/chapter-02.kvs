@@ -2,7 +2,11 @@
 course_id: "advanced-systems"
 chapter: 2
 title: "Memory Safety and Buffer Overflow"
-bloom_level: "evaluate"
+difficulty: "advanced"
+date_created: "2026-06-01"
+date_updated: "2026-06-10"
+creator: "Kvasir Team"
+description: "Understand buffer overflow vulnerabilities, stack layout, and modern mitigations like stack canaries and ASLR."
 ---
 
 # Memory Safety and Buffer Overflow

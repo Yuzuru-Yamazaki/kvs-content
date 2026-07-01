@@ -1,0 +1,72 @@
+---
+course_id: "python-basics"
+chapter: 2
+title: "Data Structures"
+difficulty: "beginner"
+date_created: "2026-06-01"
+date_updated: "2026-06-04"
+creator: "Kvasir Team"
+description: "Work with Python's built-in data structures: lists, dictionaries, sets, and tuples."
+---
+
+# Data Structures
+
+Python has powerful built-in data structures that make many tasks easy.
+
+## Lists
+
+Ordered, mutable collections:
+
+```python
+fruits = ["apple", "banana", "cherry"]
+fruits.append("date")
+fruits[0] = "apricot"
+
+for fruit in fruits:
+    print(fruit)
+```
+
+## Dictionaries
+
+Key-value pairs:
+
+```python
+student = {
+    "name": "Bob",
+    "age": 20,
+    "courses": ["Math", "Physics"]
+}
+
+print(student["name"])
+student["grade"] = "A"
+```
+
+## Sets and Tuples
+
+```python
+# Set — unique elements
+unique = {1, 2, 2, 3, 3, 3}
+print(unique)  # {1, 2, 3}
+
+# Tuple — immutable
+point = (3, 4)
+x, y = point   # unpacking
+```
+
+## Practice
+
+Write a function `count_words(text)` that takes a string and returns a dictionary mapping each word to its frequency.
+
+:::evaluate{criteria="data-structures"}
+### Code Review
+
+What will this code output?
+
+```python
+data = [1, 2, 3]
+data.append([4, 5])
+print(len(data))
+```
+
+Think about what `append` does versus `extend`.
+:::

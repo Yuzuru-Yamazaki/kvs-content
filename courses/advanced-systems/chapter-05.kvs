@@ -2,7 +2,11 @@
 course_id: "advanced-systems"
 chapter: 5
 title: "Capstone: Systems Design Synthesis"
-bloom_level: "create"
+difficulty: "advanced"
+date_created: "2026-06-10"
+date_updated: "2026-06-25"
+creator: "Kvasir Team"
+description: "Design a high-throughput log ingestion system combining everything: batching, sharding, replication, and indexing."
 ---
 
 # Capstone: Systems Design Synthesis

@@ -1,12 +1,44 @@
 {
   "courses": [
     {
+      "id": "intro-to-c",
+      "title": "Introduction to C Programming",
+      "description": "Learn the fundamentals of C programming: variables, control flow, functions, pointers, and memory management.",
+      "chapters": 4,
+      "difficulty": "beginner",
+      "creator": "Kvasir Team"
+    },
+    {
+      "id": "python-basics",
+      "title": "Python Basics",
+      "description": "A gentle introduction to Python: data types, loops, functions, file I/O, and basic data structures.",
+      "chapters": 3,
+      "difficulty": "beginner",
+      "creator": "Kvasir Team"
+    },
+    {
+      "id": "git-fundamentals",
+      "title": "Git Fundamentals",
+      "description": "Master version control with Git: repos, branches, merges, remotes, and collaboration workflows.",
+      "chapters": 2,
+      "difficulty": "beginner",
+      "creator": "Kvasir Team"
+    },
+    {
+      "id": "data-structures",
+      "title": "Data Structures in C",
+      "description": "Implement linked lists, hash tables, trees, and graphs from scratch in C.",
+      "chapters": 4,
+      "difficulty": "intermediate",
+      "creator": "Kvasir Team"
+    },
+    {
       "id": "advanced-systems",
       "title": "Advanced Systems Programming",
       "description": "Register allocation, memory safety, lock-free data structures, cache-oblivious algorithms, and a capstone design challenge.",
       "chapters": 5,
-      "bloom_levels": ["evaluate", "create"],
-      "difficulty": "advanced"
+      "difficulty": "advanced",
+      "creator": "Kvasir Team"
     }
   ]
 }

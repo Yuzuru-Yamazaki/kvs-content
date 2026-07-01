@@ -1,0 +1,70 @@
+---
+course_id: "data-structures"
+chapter: 4
+title: "Graphs"
+difficulty: "intermediate"
+date_created: "2026-06-08"
+date_updated: "2026-06-15"
+creator: "Kvasir Team"
+description: "Represent graphs with adjacency lists/matrices and implement BFS and DFS traversals."
+---
+
+# Graphs
+
+Graphs model relationships between entities using vertices (nodes) and edges.
+
+## Representations
+
+**Adjacency Matrix** — O(1) edge lookup, O(V²) space:
+
+```c
+int graph[V][V];
+graph[0][1] = 1;  // edge from 0 to 1
+```
+
+**Adjacency List** — O(V+E) space, good for sparse graphs:
+
+```c
+typedef struct adj_node {
+    int vertex;
+    struct adj_node *next;
+} adj_node_t;
+
+adj_node_t *adj_list[V];
+```
+
+## BFS (Breadth-First Search)
+
+```c
+void bfs(adj_node_t **graph, int start, int V) {
+    int visited[V];
+    memset(visited, 0, sizeof(visited));
+
+    int queue[V], front = 0, rear = 0;
+    queue[rear++] = start;
+    visited[start] = 1;
+
+    while (front < rear) {
+        int v = queue[front++];
+        printf("%d ", v);
+
+        for (adj_node_t *n = graph[v]; n; n = n->next) {
+            if (!visited[n->vertex]) {
+                visited[n->vertex] = 1;
+                queue[rear++] = n->vertex;
+            }
+        }
+    }
+}
+```
+
+## Challenge
+
+Implement DFS recursively and iteratively (using a stack). Then use BFS to find the shortest path between two vertices in an unweighted graph.
+
+:::project{environment="node" template="graph-lab"}
+
+### Objective
+
+Build a graph using adjacency lists. Implement BFS and DFS. Then write a function `shortest_path(start, end)` that returns the path using BFS.
+:::

@@ -1,0 +1,69 @@
+---
+course_id: "intro-to-c"
+chapter: 4
+title: "Memory Management"
+difficulty: "beginner"
+date_created: "2026-06-02"
+date_updated: "2026-06-06"
+creator: "Kvasir Team"
+description: "Understand stack vs heap memory, malloc, calloc, free, and common memory errors."
+---
+
+# Memory Management
+
+C gives you direct control over memory — with great power comes great responsibility.
+
+## Stack vs Heap
+
+| Stack | Heap |
+|-------|------|
+| Automatic allocation | Manual allocation |
+| Fixed size (limited) | Flexible, large |
+| Local variables | Dynamic data |
+| Fast | Slower |
+
+## Dynamic Allocation
+
+```c
+#include <stdlib.h>
+
+int *arr = malloc(5 * sizeof(int));   // allocate
+if (arr == NULL) {
+    // handle allocation failure
+}
+
+arr[0] = 10;
+arr[1] = 20;
+// ... use it ...
+
+free(arr);  // always free!
+```
+
+> **Always check if malloc returns NULL.** Memory allocation can fail.
+
+## Common Mistakes
+
+- **Memory leaks:** forgetting to `free()`
+- **Dangling pointers:** using memory after `free()`
+- **Buffer overflows:** writing past allocated bounds
+- **Double free:** calling `free()` twice on the same pointer
+
+## Practice
+
+Write a program that dynamically allocates an array of 10 integers, fills it with the first 10 Fibonacci numbers, prints them, and then frees the memory.
+
+:::evaluate{criteria="memory-management"}
+### Critique
+
+What's wrong with this code?
+
+```c
+int *get_array() {
+    int arr[10];
+    // fill arr...
+    return arr;  // BUG!
+}
+```
+
+Think about where `arr` lives in memory.
+:::

@@ -1,0 +1,63 @@
+---
+course_id: "data-structures"
+chapter: 2
+title: "Hash Tables"
+difficulty: "intermediate"
+date_created: "2026-06-05"
+date_updated: "2026-06-10"
+creator: "Kvasir Team"
+description: "Build a hash table with chaining, handle collisions, and understand hash functions."
+---
+
+# Hash Tables
+
+Hash tables provide O(1) average-time lookup by mapping keys to array indices via a hash function.
+
+## Hash Function
+
+```c
+unsigned int hash(const char *key, int table_size) {
+    unsigned int h = 0;
+    for (int i = 0; key[i] != '\0'; i++) {
+        h = h * 31 + key[i];
+    }
+    return h % table_size;
+}
+```
+
+## Collision Resolution: Chaining
+
+Each bucket holds a linked list of entries:
+
+```c
+typedef struct entry {
+    char *key;
+    int value;
+    struct entry *next;
+} entry_t;
+
+typedef struct {
+    entry_t **buckets;
+    int size;
+} hash_table_t;
+```
+
+## Load Factor
+
+The load factor α = n / m (entries / buckets). For good performance, keep α < 1. When α exceeds a threshold, **rehash** (double the table size and reinsert all entries).
+
+## Challenge
+
+Implement a hash table that stores student IDs (integer) by name (string). Use separate chaining and automatic resizing.
+
+:::evaluate{criteria="hash-design"}
+### Critique
+
+What happens if the hash function always returns 0? How would that affect performance?
+
+```c
+unsigned int bad_hash(const char *key, int table_size) {
+    return 0;
+}
+```
+:::

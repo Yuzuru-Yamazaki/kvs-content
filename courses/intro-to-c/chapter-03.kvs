@@ -1,0 +1,60 @@
+---
+course_id: "intro-to-c"
+chapter: 3
+title: "Functions and Pointers"
+difficulty: "beginner"
+date_created: "2026-06-01"
+date_updated: "2026-06-05"
+creator: "Kvasir Team"
+description: "Write reusable functions and understand C's most powerful feature: pointers."
+---
+
+# Functions and Pointers
+
+## Functions
+
+Functions let you organize code into reusable blocks.
+
+```c
+int add(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    int result = add(5, 3);
+    printf("%d\n", result);  // 8
+    return 0;
+}
+```
+
+## Pointers
+
+A pointer stores the memory address of another variable.
+
+```c
+int x = 42;
+int *ptr = &x;   // ptr stores the address of x
+
+printf("%d\n", *ptr);  // 42 (dereferencing)
+*ptr = 100;            // changes x to 100
+printf("%d\n", x);     // 100
+```
+
+### Pointer Diagram
+
+```
+Variable x: [ 42 ]    at address 0x7fff
+                ↑
+Pointer ptr: [ 0x7fff ]
+```
+
+## Practice
+
+Write a function `swap` that takes two integer pointers and swaps the values they point to.
+
+:::project{environment="node" template="pointers-lab"}
+
+### Objective
+
+Implement `swap(int *a, int *b)` and a function that finds the largest element in an array using pointer arithmetic.
+:::

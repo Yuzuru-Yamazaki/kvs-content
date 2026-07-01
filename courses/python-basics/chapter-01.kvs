@@ -1,0 +1,55 @@
+---
+course_id: "python-basics"
+chapter: 1
+title: "Getting Started with Python"
+difficulty: "beginner"
+date_created: "2026-06-01"
+date_updated: "2026-06-04"
+creator: "Kvasir Team"
+description: "Write your first Python program and learn about variables, data types, and basic input/output."
+---
+
+# Getting Started with Python
+
+Python is an interpreted, dynamically-typed language known for its readability.
+
+## Your First Program
+
+```python
+print("Hello, Kvasir!")
+```
+
+## Variables and Types
+
+Python figures out types automatically:
+
+```python
+name = "Alice"        # str
+age = 25              # int
+height = 1.75         # float
+is_student = True     # bool
+
+print(f"{name} is {age} years old and {height}m tall.")
+```
+
+## Basic Input
+
+```python
+name = input("What is your name? ")
+print(f"Hello, {name}!")
+```
+
+## Challenge
+
+Write a program that asks the user for their name and age, then prints a greeting with the year they were born.
+
+```python
+# Hint: use input() and int()
+```
+
+:::project{environment="node" template="python-intro-lab"}
+
+### Objective
+
+Write a program that reads a user's name and age, calculates their birth year, and prints a personalized greeting.
+:::

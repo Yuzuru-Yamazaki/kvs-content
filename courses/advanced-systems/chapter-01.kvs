@@ -2,7 +2,11 @@
 course_id: "advanced-systems"
 chapter: 1
 title: "Optimizing the Register Allocation"
-bloom_level: "create"
+difficulty: "advanced"
+date_created: "2026-06-01"
+date_updated: "2026-06-15"
+creator: "Kvasir Team"
+description: "Learn how compilers map virtual registers to physical registers using graph coloring, and analyze spilling strategies."
 ---
 
 # Optimizing the Register Allocation
@@ -58,8 +62,6 @@ void process_values(int *data, int len) {
 Analyze the register pressure in this loop. How would you restructure the code to minimize spilling? Write a structural critique.
 
 ```c
-// Consider: which variables are live simultaneously?
-// How could you reuse registers across loop iterations?
 void process_values(int *data, int len) {
     int a = 0, b = 0, c = 0, d = 0;
     int e = 0, f = 0, g = 0, h = 0;

@@ -1,0 +1,58 @@
+---
+course_id: "intro-to-c"
+chapter: 1
+title: "Variables and Data Types"
+difficulty: "beginner"
+date_created: "2026-06-01"
+date_updated: "2026-06-05"
+creator: "Kvasir Team"
+description: "Learn about C's basic data types, variable declarations, and how data is stored in memory."
+---
+
+# Variables and Data Types
+
+C is a statically-typed language — every variable must be declared with a type before it can be used.
+
+## Basic Types
+
+| Type | Size (typical) | Format Specifier |
+|------|---------------|------------------|
+| `char` | 1 byte | `%c` |
+| `int` | 4 bytes | `%d` |
+| `float` | 4 bytes | `%f` |
+| `double` | 8 bytes | `%lf` |
+
+```c
+#include <stdio.h>
+
+int main() {
+    int age = 25;
+    float pi = 3.14159;
+    char grade = 'A';
+
+    printf("Age: %d\n", age);
+    printf("Pi: %.2f\n", pi);
+    printf("Grade: %c\n", grade);
+    return 0;
+}
+```
+
+## Declaring Variables
+
+```c
+int count;              // declaration
+count = 10;             // assignment
+int total = 100;        // initialization
+const int MAX = 500;    // constant (can't be changed)
+```
+
+## Practice
+
+Write a program that declares a `double` variable for temperature, assigns it a value, and prints it with one decimal place.
+
+:::project{environment="node" template="c-basics-lab"}
+
+### Objective
+
+Write a C program that declares variables of each basic type, assigns them values, and prints them using the correct format specifiers.
+:::

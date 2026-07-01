@@ -1,0 +1,74 @@
+---
+course_id: "intro-to-c"
+chapter: 2
+title: "Control Flow"
+difficulty: "beginner"
+date_created: "2026-06-01"
+date_updated: "2026-06-05"
+creator: "Kvasir Team"
+description: "Master if-else conditions, loops, and switch statements in C."
+---
+
+# Control Flow
+
+Control flow determines the order in which statements are executed.
+
+## Conditionals
+
+```c
+int score = 85;
+
+if (score >= 90) {
+    printf("Grade: A\n");
+} else if (score >= 80) {
+    printf("Grade: B\n");
+} else {
+    printf("Grade: C or lower\n");
+}
+```
+
+## Loops
+
+**for loop** — when you know the count:
+
+```c
+for (int i = 0; i < 5; i++) {
+    printf("%d ", i);
+}
+// Output: 0 1 2 3 4
+```
+
+**while loop** — when you have a condition:
+
+```c
+int x = 10;
+while (x > 0) {
+    printf("%d ", x);
+    x -= 2;
+}
+// Output: 10 8 6 4 2
+```
+
+## Challenge
+
+Write a program that prints a multiplication table for a number entered by the user.
+
+:::evaluate{criteria="loop-logic"}
+### Code Review
+
+Analyze this loop. What will it print? Is there a bug?
+
+```c
+int i = 0;
+while (i < 5) {
+    printf("%d\n", i);
+}
+```
+
+Think about it before reading the answer below.
+
+<details>
+<summary>Answer</summary>
+This is an **infinite loop** — `i` is never incremented. It will print `0` forever.
+</details>
+:::

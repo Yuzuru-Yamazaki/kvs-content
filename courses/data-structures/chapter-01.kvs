@@ -1,0 +1,63 @@
+---
+course_id: "data-structures"
+chapter: 1
+title: "Linked Lists"
+difficulty: "intermediate"
+date_created: "2026-06-05"
+date_updated: "2026-06-10"
+creator: "Kvasir Team"
+description: "Implement singly and doubly linked lists with insertion, deletion, and traversal operations."
+---
+
+# Linked Lists
+
+A linked list is a linear data structure where elements are stored in nodes that point to the next node.
+
+## Node Structure
+
+```c
+typedef struct node {
+    int data;
+    struct node *next;
+} node_t;
+```
+
+## Traversal
+
+```c
+void print_list(node_t *head) {
+    node_t *current = head;
+    while (current != NULL) {
+        printf("%d → ", current->data);
+        current = current->next;
+    }
+    printf("NULL\n");
+}
+```
+
+## Insertion
+
+```c
+void push_front(node_t **head, int value) {
+    node_t *new_node = malloc(sizeof(node_t));
+    new_node->data = value;
+    new_node->next = *head;
+    *head = new_node;
+}
+```
+
+## Challenge
+
+Implement a function `reverse(node_t *head)` that reverses a linked list in-place.
+
+```c
+// Input:  1 → 2 → 3 → NULL
+// Output: 3 → 2 → 1 → NULL
+```
+
+:::project{environment="node" template="linked-list-lab"}
+
+### Objective
+
+Implement a singly linked list with `push_front`, `pop_front`, `insert` (at position), `delete` (by value), and `reverse`.
+:::
