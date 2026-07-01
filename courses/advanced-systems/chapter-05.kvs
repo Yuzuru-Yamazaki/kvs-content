@@ -1,0 +1,56 @@
+---
+course_id: "advanced-systems"
+chapter: 5
+title: "Capstone: Systems Design Synthesis"
+bloom_level: "create"
+---
+
+# Capstone: Systems Design Synthesis
+
+Bring together everything you've learned in a comprehensive design challenge.
+
+## The Problem
+
+Design a **high-throughput log ingestion system** that can handle 1M events/second from distributed sources.
+
+### Requirements
+
+- **Ingestion:** Accept HTTP POST and gRPC streams
+- **Durability:** No data loss on crash (durable writes)
+- **Query:** Support time-range queries within 500ms
+- **Ordering:** Preserve causal ordering within each source
+
+## Architecture Constraints
+
+- 3 worker nodes, each with 16GB RAM, 4 cores
+- Network: 10Gbps between nodes
+- Storage: NVMe SSD (2GB/s sequential, 500K IOPS)
+
+:::project{environment="node" template="design-capstone"}
+
+### Objective
+
+Design and implement the core ingestion pipeline. Your solution will be benchmarked against a test harness that measures throughput, p99 latency, and durability guarantees.
+
+Key areas to focus on:
+1. **Batching** — aggregate writes for efficiency
+2. **Sharding** — distribute across workers
+3. **Replication** — ensure no data loss
+4. **Indexing** — fast time-range queries
+:::
+
+## Evaluation Criteria
+
+| Metric | Target | Weight |
+|--------|--------|--------|
+| Throughput | ≥ 1M events/sec | 30% |
+| p99 Latency | ≤ 50ms | 25% |
+| Durability | Zero loss on crash | 25% |
+| Query speed | ≤ 500ms | 20% |
+
+## Hints
+
+- Batching is essential for throughput: collect events into 64KB buffers before flushing
+- Use a write-ahead log (WAL) for durability before updating indexes
+- Consider using a skip list or LSM tree for the time-range index
+- Network is your bottleneck: compress events before sending between nodes

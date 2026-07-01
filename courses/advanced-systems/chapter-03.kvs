@@ -1,0 +1,76 @@
+---
+course_id: "advanced-systems"
+chapter: 3
+title: "Lock-Free Data Structures"
+bloom_level: "create"
+---
+
+# Lock-Free Data Structures
+
+Lock-free programming allows concurrent access to shared data without using mutual exclusion.
+
+## Why Lock-Free?
+
+- **No deadlocks** — threads never block waiting for each other
+- **No priority inversion** — no locks to contend over
+- **Fault tolerance** — a crashing thread can't hold a lock forever
+- **Performance** — better scalability on multi-core systems
+
+## The Key Primitive: CAS
+
+Compare-and-swap (CAS) is the fundamental atomic operation:
+
+```c
+bool compare_and_swap(uint64_t *ptr, uint64_t expected, uint64_t desired) {
+    if (*ptr == expected) {
+        *ptr = desired;
+        return true;
+    }
+    return false;
+}
+```
+
+## Lock-Free Stack
+
+```c
+typedef struct node {
+    int value;
+    struct node *next;
+} node_t;
+
+typedef struct {
+    node_t *top;
+} stack_t;
+
+void push(stack_t *stack, node_t *node) {
+    do {
+        node->next = stack->top;
+    } while (!CAS(&stack->top, node->next, node));
+}
+
+node_t *pop(stack_t *stack) {
+    node_t *node;
+    do {
+        node = stack->top;
+        if (node == NULL) return NULL;
+    } while (!CAS(&stack->top, node, node->next));
+    return node;
+}
+```
+
+> **Warning:** This simple stack has an ABA problem! Can you spot it?
+
+:::project{environment="node" template="lock-free-lab"}
+
+### Objective
+
+Fix the ABA problem in the lock-free stack implementation. Then implement a lock-free queue using the two-pointer technique.
+:::
+
+## Memory Reclamation
+
+The hardest problem in lock-free programming: when can you safely free a node?
+
+- **Hazard pointers** — each thread announces which pointers it's accessing
+- **RCU (Read-Copy-Update)** — wait for quiescent periods
+- **Epoch-based reclamation** — track grace periods

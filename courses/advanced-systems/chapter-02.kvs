@@ -1,0 +1,69 @@
+---
+course_id: "advanced-systems"
+chapter: 2
+title: "Memory Safety and Buffer Overflow"
+bloom_level: "evaluate"
+---
+
+# Memory Safety and Buffer Overflow
+
+Buffer overflows remain one of the most common and dangerous classes of vulnerabilities in systems programming.
+
+## The Root Cause
+
+C and C++ do not perform bounds checking on array accesses. When a program writes past the end of a buffer, adjacent memory on the stack or heap gets corrupted.
+
+### Stack Layout
+
+```
+Higher addresses
++------------------+
+|   return address |  ← overwritten → control flow hijack
++------------------+
+|   saved base ptr |
++------------------+
+|   local var 2    |
++------------------+
+|   local var 1    |
++------------------+
+|   buffer[64]     |  ← write starts here, grows up
++------------------+
+Lower addresses
+```
+
+:::evaluate{criteria="memory-safety"}
+### System Critique Challenge
+Analyze this buffer implementation. Find the vulnerability and write a structural critique.
+
+```c
+void process_packet(char *data) {
+    char buffer[64];
+    strcpy(buffer, data);
+}
+```
+:::
+
+## Safer Alternatives
+
+| Function | Safety | Notes |
+|----------|--------|-------|
+| `strcpy` | Unsafe | No bounds checking |
+| `strncpy` | Partial | Doesn't null-terminate if source ≥ n |
+| `strlcpy` | Safe | BSD extension, always null-terminates |
+| `memcpy_s` | Safe | C11 Annex K, runtime constraint checks |
+
+:::project{environment="node" template="memory-safety-lab"}
+
+### Objective
+
+Refactor the file system interface in the provided sandbox environment to eliminate race conditions. Your code must pass all accompanying unit tests.
+:::
+
+## Defenses
+
+Modern compilers and operating systems provide several mitigations:
+
+1. **Stack canaries** — Place a guard value before the return address
+2. **ASLR** — Randomize address space layout
+3. **Non-executable stack** — NX bit prevents code execution on the stack
+4. **Address Sanitizer** — Compiler instrumentation for detection

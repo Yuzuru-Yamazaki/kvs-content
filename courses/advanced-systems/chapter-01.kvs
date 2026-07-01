@@ -1,0 +1,83 @@
+---
+course_id: "advanced-systems"
+chapter: 1
+title: "Optimizing the Register Allocation"
+bloom_level: "create"
+---
+
+# Optimizing the Register Allocation
+
+Register allocation is a critical optimization in compilers. The goal is to map a large number of virtual registers onto a limited set of physical registers.
+
+## The Problem
+
+When a compiler generates intermediate code, it typically uses an unbounded set of virtual (or symbolic) registers. The register allocator's job is to assign these to a fixed number of physical registers. When the demand exceeds supply, values must be *spilled* to memory.
+
+> **Key Insight:** The quality of register allocation directly impacts runtime performance. A good allocator can reduce memory traffic by 20-40%.
+
+## Graph Coloring Approach
+
+The most common approach models the problem as a graph coloring problem:
+
+- Each **virtual register** is a **node** in the interference graph
+- An **edge** connects two nodes if their lifetimes overlap
+- **Colors** represent physical registers
+- The goal: assign colors using at most *k* colors (where *k* = number of physical registers)
+
+:::video{platform="youtube" id="dQw4w9WgXcQ"}
+Optional: Watch the deep-dive on graph coloring register allocation.
+:::
+
+## Challenge
+
+Consider the following code snippet. The function uses 8 variables but the target architecture has only 4 physical registers.
+
+```c
+void process_values(int *data, int len) {
+    int a = 0, b = 0, c = 0, d = 0;
+    int e = 0, f = 0, g = 0, h = 0;
+
+    for (int i = 0; i < len; i++) {
+        a += data[i];
+        b += data[i] * 2;
+        c += data[i] / 2;
+        d += data[i] * data[i];
+    }
+
+    e = a / len;
+    f = b / len;
+    g = c / len;
+    h = d / len;
+
+    printf("avg: %d, weighted: %d, halved: %d, sq: %d\n", e, f, g, h);
+}
+```
+
+:::evaluate{criteria="register-pressure"}
+### System Critique Challenge
+Analyze the register pressure in this loop. How would you restructure the code to minimize spilling? Write a structural critique.
+
+```c
+// Consider: which variables are live simultaneously?
+// How could you reuse registers across loop iterations?
+void process_values(int *data, int len) {
+    int a = 0, b = 0, c = 0, d = 0;
+    int e = 0, f = 0, g = 0, h = 0;
+    for (int i = 0; i < len; i++) {
+        a += data[i];
+        b += data[i] * 2;
+        c += data[i] / 2;
+        d += data[i] * data[i];
+    }
+    e = a / len; f = b / len;
+    g = c / len; h = d / len;
+}
+```
+
+:::
+
+## Key Takeaways
+
+- Register allocation is NP-complete in general, but heuristics work well in practice
+- Spilling is expensive — each spill costs a load/store pair
+- Modern allocators use iterative coalescing and live-range splitting

@@ -1,0 +1,71 @@
+---
+course_id: "advanced-systems"
+chapter: 4
+title: "Cache-Oblivious Algorithms"
+bloom_level: "create"
+---
+
+# Cache-Oblivious Algorithms
+
+A cache-oblivious algorithm is designed to minimize cache misses without knowing the cache parameters.
+
+## The Cache Hierarchy
+
+```
+CPU  →  L1 (32KB)  →  L2 (256KB)  →  L3 (8MB)  →  RAM  →  Disk
+       ~1ns           ~5ns           ~15ns        ~100ns    ~10ms
+```
+
+The gap between CPU speed and memory latency is the **memory wall**.
+
+## The Key Idea
+
+Optimize for **cache line usage** (typically 64 bytes). When memory is accessed, an entire cache line is fetched. The goal is to use every byte before the line is evicted.
+
+## Matrix Multiplication: Before & After
+
+**Naïve approach** (cache-unfriendly):
+
+```c
+for (i = 0; i < N; i++)
+    for (j = 0; j < N; j++)
+        for (k = 0; k < N; k++)
+            C[i][j] += A[i][k] * B[k][j];  // B accessed column-wise → cache misses!
+```
+
+**Cache-oblivious** (recursive blocking):
+
+```c
+void multiply(int N, int A[N][N], int B[N][N], int C[N][N]) {
+    if (N <= 32) {  // base case fits in cache
+        for (i = 0; i < N; i++)
+            for (j = 0; j < N; j++)
+                for (k = 0; k < N; k++)
+                    C[i][j] += A[i][k] * B[k][j];
+        return;
+    }
+    int half = N / 2;
+    // Recurse on 8 sub-blocks
+    multiply(half, A[0][0], B[0][0], C[0][0]);
+    multiply(half, A[0][0], B[0][half], C[0][half]);
+    // ... (6 more recursive calls)
+}
+```
+
+:::evaluate{criteria="cache-analysis"}
+### System Critique Challenge
+Analyze the cache behavior of both implementations. Why does the recursive version get better cache utilization regardless of cache size?
+
+```c
+// Naïve: C[i][j] += A[i][k] * B[k][j]
+// Cache-oblivious: recursive divide-and-conquer on blocks
+```
+:::
+
+## The Z-Order Curve
+
+For even better locality, use the Morton order (Z-order) to store matrix elements:
+
+- Interleave the bits of the row and column indices
+- Nearby elements in 2D space → nearby in memory
+- Works recursively at every level of the cache hierarchy
