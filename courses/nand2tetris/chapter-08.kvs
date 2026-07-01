@@ -1,0 +1,119 @@
+---
+course_id: "nand2tetris"
+chapter: 8
+title: "Virtual Machine II: Program Control"
+difficulty: "advanced"
+date_created: "2026-07-01"
+date_updated: "2026-07-01"
+creator: "Kvasir Team"
+description: "Extend the VM translator with branching, function calls, and return — completing the VM."
+field: "computer-science"
+tags: ["nand2tetris", "virtual-machine", "functions", "vm-translator"]
+---
+# Virtual Machine II: Program Control and Functions
+
+In this chapter we extend the VM translator to handle branching, function calls, and returns — completing the VM implementation.
+
+## Program Flow Commands
+
+The VM supports two branching commands:
+
+| Command       | Effect                          |
+|---------------|---------------------------------|
+| label name    | declares a label                |
+| goto name     | jumps to label                  |
+| if-goto name  | pops stack; if non-zero, jump   |
+
+These map directly to assembly labels and conditional jumps.
+
+## Function Call and Return
+
+Function calls follow a calling convention:
+
+1. **Before call**: push arguments, then call the function
+2. **On call**: save the caller's state (return address, LCL, ARG, THIS, THAT)
+3. **On return**: restore the caller's state, push the return value
+
+```
+call f n            // n = number of arguments
+function f k        // k = number of local variables
+return              // return to caller
+```
+
+## The Call Stack
+
+Each function invocation creates a stack frame:
+
+```
++------------------+
+| return address   |  (saved by call)
+| saved LCL        |
+| saved ARG        |  (caller's frame)
+| saved THIS       |
+| saved THAT       |
+| argument 0       |  (caller's arguments)
+| argument 1       |
+| ...              |
+| local 0          |  (current function's locals)
+| local 1          |
+| ...              |
+| working stack    |
++------------------+
+```
+
+The ARG pointer marks the start of the arguments, and LCL marks the start of the locals.
+
+## VM Translator Architecture
+
+Extend our translator with:
+
+```python
+class CodeWriter:
+    def write_init(self):       // Bootstrap: SP=256, call Sys.init
+    def write_label(self, label)
+    def write_goto(self, label)
+    def write_if(self, label)
+    def write_call(self, name, nArgs)
+    def write_function(self, name, nLocals)
+    def write_return(self)
+```
+
+:::video{platform="youtube" id="IlPj5Rg1y2w"}
+The Google Tech Talk dives into how function calls work at the VM level and why the call stack is fundamental to modern programming.
+:::
+
+## Think Critically
+
+:::evaluate{criteria="calling-conventions"}
+
+### Why save and restore?
+
+The VM calling convention saves five registers on every function call. What would happen if we didn't save them? Could we optimize by saving only some of them?
+
+### Criteria
+- Explains register corruption without saving/restoring
+- Recognizes that unused registers could skip saving
+- Considers optimization vs. correctness
+:::
+
+## Project
+
+:::project{environment="node" template="nand2tetris-project8"}
+
+### Objective
+
+Extend the VM translator to handle program flow and function calls.
+
+### Requirements
+1. Implement label, goto, and if-goto commands
+2. Implement function, call, and return commands
+3. Implement the VM bootstrap (SP=256, call Sys.init)
+4. Support multiple .vm files (single output)
+5. Pass all supplied tests including NestedCall, FibonacciElement, and StaticsTest
+
+### Hints
+- The return address is the instruction after the call
+- Use unique labels for each call site (e.g., "filename.Sys$ret.5")
+- Static variables are unique per VM file, not per function
+- The bootstrap code must run before any other code
+:::
