@@ -1,0 +1,108 @@
+---
+course_id: "nand2tetris"
+chapter: 6
+title: "The Assembler"
+difficulty: "intermediate"
+date_created: "2026-07-01"
+date_updated: "2026-07-01"
+creator: "Kvasir Team"
+description: "Build a two-pass assembler that translates human-readable assembly into binary machine code."
+field: "computer-science"
+tags: ["nand2tetris", "assembler", "compiler", "software"]
+---
+# The Assembler
+
+An assembler translates human-readable assembly language into binary machine code that the CPU can execute. We'll build an assembler for the Hack platform.
+
+## Assembly to Binary
+
+Each Hack instruction maps to a 16-bit binary word:
+
+### A-Instruction: 0vvv vvvv vvvv vvvv
+
+```
+@100  ->  0 0000 0000 1100 100
+```
+
+### C-Instruction: 111a cccc ccdd djjj
+
+```
+D=M    ->  1111 1100 0001 0000
+0;JMP  ->  1110 1010 1000 0111
+```
+
+The opcode bits encode the comp, dest, and jump fields.
+
+## Assembler Modules
+
+A complete assembler has these components:
+
+1. **Parser** — reads assembly instructions, strips whitespace and comments, breaks each instruction into fields
+2. **Symbol Table** — maps labels and variables to addresses
+3. **Code Module** — translates assembly fields to binary codes
+4. **Main Driver** — orchestrates the two-pass assembly process
+
+## Two-Pass Assembly
+
+**Pass 1**: Build the symbol table by scanning for labels (like `(LOOP)`).
+
+**Pass 2**: Translate each instruction to binary, resolving symbols using the table. Variables are assigned consecutive addresses starting at RAM[16].
+
+## Example: Parser in Python
+
+```python
+class Parser:
+    def __init__(self, filename):
+        with open(filename) as f:
+            lines = f.readlines()
+        self.instructions = [line.split('//')[0].strip()
+                           for line in lines
+                           if line.strip() and not line.strip().startswith('//')]
+        self.current = 0
+
+    def has_more_commands(self):
+        return self.current < len(self.instructions)
+
+    def advance(self):
+        self.current += 1
+```
+
+:::video{platform="youtube" id="JtXvUoPx4Qs"}
+Understanding the assembler is a key step in the Nand to Tetris journey — it's the bridge between human-readable code and machine-executable bits.
+:::
+
+## Think Critically
+
+:::evaluate{criteria="assembler-design"}
+
+### Why two passes?
+
+Why does the assembler need two passes? Why can't it translate everything in a single pass? What problem do labels present?
+
+### Criteria
+- Explains forward references: labels used before they are defined
+- Describes the two-pass approach (first for symbols, second for translation)
+- Considers single-pass alternatives (e.g., backpatching)
+:::
+
+## Project
+
+:::project{environment="node" template="nand2tetris-project6"}
+
+### Objective
+
+Build a Hack assembler that translates .asm files to .hack binary files.
+
+### Requirements
+1. Implement the Parser module (handles A-instructions, C-instructions, labels, comments, whitespace)
+2. Implement the Code module (translates dest, comp, jump fields to binary)
+3. Implement the Symbol Table (predefined symbols, labels, variables)
+4. Implement the two-pass assembly process
+5. Assemble the programs from Project 4 and verify they match the expected output
+
+### Hints
+- Implement in any language (Python is recommended for simplicity)
+- Predefined symbols: R0-R15, SP, LCL, ARG, THIS, THAT, SCREEN, KBD
+- Labels are enclosed in parentheses and don't generate machine code
+- Variables start at address 16
+:::
