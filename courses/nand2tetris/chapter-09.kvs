@@ -1,0 +1,126 @@
+---
+course_id: "nand2tetris"
+chapter: 9
+title: "High-Level Language: Jack"
+difficulty: "intermediate"
+date_created: "2026-07-01"
+date_updated: "2026-07-01"
+creator: "Kvasir Team"
+description: "Write object-oriented Jack programs including games that run on your self-built computer."
+field: "computer-science"
+tags: ["nand2tetris", "jack", "high-level-language", "programming"]
+---
+# High-Level Language: Jack
+
+Jack is a simple, Java-like object-oriented language designed for the Hack platform. Writing Jack programs helps us understand language features before we build the compiler.
+
+## Hello World in Jack
+
+```jack
+class Main {
+    function void main() {
+        do Output.printString("Hello World");
+        do Output.println();
+        return;
+    }
+}
+```
+
+## Jack Language Features
+
+### Data Types and Variables
+
+Jack supports two types: **int** (16-bit signed) and **boolean** (0/1), plus arrays and objects.
+
+```jack
+class Square {
+    field int x, y;
+    field int size;
+    static int instanceCount;
+
+    constructor Square new(int ax, int ay, int asize) {
+        let x = ax;
+        let y = ay;
+        let size = asize;
+        let instanceCount = instanceCount + 1;
+        return this;
+    }
+
+    method void draw() {
+        do Screen.drawRectangle(x, y, x + size, y + size);
+        return;
+    }
+}
+```
+
+### Statements
+
+- `let x = expression;`
+- `if (condition) { ... } else { ... }`
+- `while (condition) { ... }`
+- `do SubroutineCall(expr, ...);`
+- `return expression;`
+
+### Expressions
+
+Support arithmetic (+, -, *, /, &, |), logical operators, array access, and subroutine calls.
+
+## Array Example
+
+```jack
+class Main {
+    function void main() {
+        var Array a;
+        var int i;
+        let a = Array.new(10);
+        let i = 0;
+        while (i < 10) {
+            let a[i] = i * i;
+            let i = i + 1;
+        }
+        return;
+    }
+}
+```
+
+## Building Tetris
+
+The culmination of the course is writing a Pong or Tetris game in Jack, which you can compile and run on your Hack computer.
+
+:::video{platform="youtube" id="JtXvUoPx4Qs"}
+Shimon Schocken demonstrates how high-level Jack programs compile all the way down to the hardware you've built.
+:::
+
+## Think Critically
+
+:::evaluate{criteria="language-design"}
+
+### Jack vs. Java
+
+Jack looks like a simplified Java. Which features did the designers leave out, and why? What does this reveal about the essential vs. non-essential parts of a programming language?
+
+### Criteria
+- Identifies missing features (no inheritance, no exceptions, no overloading, no strings)
+- Explains how each omission simplifies the compiler
+- Recognizes the pedagogical goal: you can build this compiler in a semester
+:::
+
+## Project
+
+:::project{environment="node" template="nand2tetris-project9"}
+
+### Objective
+
+Write a non-trivial Jack program — ideally a game — and compile/run it on the Hack computer.
+
+### Requirements
+1. Write a complete Jack program with at least 2 classes
+2. Use arrays, objects, methods, and constructors
+3. Use the supplied Jack OS library (Screen, Keyboard, Math, String, Output, Memory)
+4. Compile and run it using the supplied tools (JackCompiler and VM Emulator or CPU Emulator)
+
+### Hints
+- Start with something simple like Average or Square before attempting Pong
+- Use the Jack OS API for screen drawing and keyboard input
+- Debug using the VM Emulator before testing on the CPU Emulator
+:::
