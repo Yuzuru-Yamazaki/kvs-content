@@ -1,0 +1,134 @@
+---
+course_id: "python-basics"
+chapter: 4
+title: "Functions and Error Handling"
+difficulty: "beginner"
+date_created: "2026-07-01"
+date_updated: "2026-07-01"
+creator: "Kvasir Team"
+description: "Write reusable functions, understand variable scope, and handle errors gracefully with try/except."
+field: "programming"
+tags: ["python", "programming", "beginner", "functions"]
+---
+
+# Functions and Error Handling
+
+Functions let you package code into reusable blocks. Error handling keeps your programs from crashing when things go wrong.
+
+## Defining Functions
+
+```python
+def greet(name):
+    return f"Hello, {name}!"
+
+message = greet("Alice")
+print(message)  # Hello, Alice!
+```
+
+## Parameters and Return Values
+
+```python
+def add(a, b):
+    return a + b
+
+result = add(3, 5)
+print(result)  # 8
+```
+
+Functions without `return` give `None`:
+
+```python
+def print_add(a, b):
+    print(a + b)
+
+value = print_add(3, 5)
+print(value)  # None
+```
+
+## Default Arguments
+
+```python
+def power(base, exp=2):
+    return base ** exp
+
+print(power(4))     # 16  (4²)
+print(power(4, 3))  # 64  (4³)
+```
+
+## Variable Scope
+
+Variables defined inside a function are local:
+
+```python
+def change():
+    x = 10
+
+x = 5
+change()
+print(x)  # 5
+```
+
+## Error Handling with try/except
+
+```python
+try:
+    number = int(input("Enter a number: "))
+    print(10 / number)
+except ValueError:
+    print("That is not a valid number!")
+except ZeroDivisionError:
+    print("Cannot divide by zero!")
+```
+
+The `else` block runs if no error occurred:
+
+```python
+try:
+    number = int(input("Enter a number: "))
+except ValueError:
+    print("Not a number!")
+else:
+    print(f"You entered {number}")
+```
+
+## Think Critically
+
+:::evaluate{criteria="debugging"}
+
+### What is wrong here?
+
+```python
+def double(x):
+    result = x * 2
+
+print(double(5))
+```
+
+The output is `None` instead of `10`. Why? How would you fix it?
+
+### Criteria
+- Identifies the missing `return` statement
+- Explains that functions without `return` implicitly return `None`
+- Provides the corrected version
+:::
+
+## Project
+
+:::project{environment="node" template="python-functions-lab"}
+
+### Objective
+
+Build a simple calculator that handles errors gracefully.
+
+### Requirements
+1. Define functions `add`, `subtract`, `multiply`, and `divide`
+2. Use a main loop that prompts for two numbers and an operation
+3. Handle `ValueError` if the input is not a number
+4. Handle `ZeroDivisionError` in the divide function
+5. Let the user keep calculating until they type "quit"
+
+### Hints
+- Use `while True` for the main loop
+- Use `if/elif` to match the operation to the right function
+- Wrap `input()` in a `try/except` to catch invalid numbers
+:::
