@@ -1,0 +1,111 @@
+---
+course_id: "nand2tetris"
+chapter: 3
+title: "Sequential Logic and Memory"
+difficulty: "intermediate"
+date_created: "2026-07-01"
+date_updated: "2026-07-01"
+creator: "Kvasir Team"
+description: "Build the Hack computer's entire memory hierarchy from a single Bit up to RAM16K and the Program Counter."
+field: "computer-science"
+tags: ["nand2tetris", "memory", "sequential-logic", "hardware"]
+---
+# Sequential Logic and Memory
+
+Unlike the combinational chips we built in projects 1 and 2, memory chips have **state** — they remember values over time. This requires a clock and sequential logic.
+
+## The Clock and Time
+
+In digital circuits, a clock signal alternates between 0 and 1 at a constant frequency. All state changes happen on the clock's rising edge (transition from 0 to 1). This synchronizes the entire system.
+
+## Data Flip-Flop (DFF)
+
+The DFF is the primitive sequential gate. Its output follows the input, but delayed by one clock cycle:
+
+```
+out(t) = in(t-1)
+```
+
+## Bit Register
+
+A Bit chip stores a single binary value. It can be written to (when load=1) or read back (when load=0).
+
+```hdl
+CHIP Bit {
+    IN in, load;
+    OUT out;
+    PARTS:
+    Mux(a=dffOut, b=in, sel=load, out=muxOut);
+    DFF(in=muxOut, out=dffOut);
+    // out = dffOut
+}
+```
+
+## Register
+
+A 16-bit Register stores a whole word — 16 Bit chips in parallel:
+
+```hdl
+CHIP Register {
+    IN in[16], load;
+    OUT out[16];
+    PARTS:
+    Bit(in=in[0], load=load, out=out[0]);
+    Bit(in=in[1], load=load, out=out[1]);
+    // ... 14 more bits ...
+}
+```
+
+## RAM
+
+RAM chips extend registers into arrays: RAM8 (8 registers), RAM64, RAM512, RAM4K, RAM16K. Each uses a **RAM counter** for address decoding.
+
+## Program Counter (PC)
+
+The PC holds the address of the next instruction. It supports three operations: reset (load address 0), next (increment), and jump (load a new address).
+
+```hdl
+CHIP PC {
+    IN in[16], load, inc, reset;
+    OUT out[16];
+    // Increments, loads, or resets on each clock tick
+}
+```
+
+:::video{platform="youtube" id="qud_r6NDdrs"}
+A visual walkthrough of building memory elements from sequential logic.
+:::
+
+## Think Critically
+
+:::evaluate{criteria="memory-hierarchy"}
+
+### RAM hierarchy
+
+Why does the project build RAM8, then RAM64, then RAM512, then RAM4K, then RAM16K — rather than building RAM16K directly from registers? What design principle does this illustrate?
+
+### Criteria
+- Identifies the recursive / hierarchical construction pattern
+- Explains how address decoding scales with each level
+- Connects to real-world memory hierarchy concepts
+:::
+
+## Project
+
+:::project{environment="node" template="nand2tetris-project3"}
+
+### Objective
+
+Build the Hack computer's entire memory hierarchy, from a single Bit up to RAM16K and the Program Counter.
+
+### Requirements
+1. Implement Bit and Register (16-bit)
+2. Build RAM8, RAM64, RAM512, RAM4K, RAM16K recursively
+3. Implement the Program Counter (PC) with reset, load, and increment
+4. Pass all test scripts
+
+### Hints
+- RAM64 uses a DMux8Way for address decoding and a Mux8Way for output selection
+- RAM chips compose recursively: RAM64 = 8 x RAM8 chips
+- The PC combines a Register, Inc16, and some Mux logic
+:::
