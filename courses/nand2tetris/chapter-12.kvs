@@ -1,0 +1,166 @@
+---
+course_id: "nand2tetris"
+chapter: 12
+title: "Operating System"
+difficulty: "advanced"
+date_created: "2026-07-01"
+date_updated: "2026-07-01"
+creator: "Kvasir Team"
+description: "Build the Jack OS standard library: Math, String, Array, Output, Screen, Keyboard, Memory, and Sys."
+field: "computer-science"
+tags: ["nand2tetris", "operating-system", "os", "standard-library"]
+---
+# Operating System
+
+The Jack Operating System is a set of standard library classes written in Jack that provide essential services: math, memory management, string handling, and I/O. This is the final layer of the Nand to Tetris software stack.
+
+## OS Modules
+
+The Jack OS consists of 8 modules:
+
+| Class     | Purpose                                          |
+|-----------|--------------------------------------------------|
+| Math      | Multiplication, division, square root            |
+| String    | String creation, concatenation, comparison       |
+| Array     | Array allocation and deallocation                |
+| Output    | Character and string output to screen            |
+| Screen    | Pixel, line, rectangle, circle drawing           |
+| Keyboard  | Reading key presses and characters               |
+| Memory    | Heap management (alloc/dealloc)                  |
+| Sys       | System startup, error handling, timer            |
+
+## Memory Management
+
+The Memory class implements heap management using a **free list** algorithm:
+
+```jack
+class Memory {
+    static Array freeList;
+
+    function void init() {
+        let freeList = 2048;  // heap starts after OS code
+        let freeList[0] = 0;  // next = null (end of list)
+        let freeList[1] = 14336 - 2048;  // size of free block
+        return;
+    }
+
+    function int alloc(int size) {
+        // Find a free block, split if needed
+        // Returns address of allocated block
+    }
+
+    function void deAlloc(int address) {
+        // Return block to free list
+    }
+}
+```
+
+## Math Library
+
+The Math class implements multiplication, division, and square root using efficient algorithms:
+
+```jack
+class Math {
+    function int multiply(int x, int y) {
+        // Shift-and-add multiplication
+    }
+
+    function int divide(int x, int y) {
+        // Shift-and-subtract division
+    }
+
+    function int sqrt(int x) {
+        // Newton-Raphson or integer approximation
+    }
+}
+```
+
+## Screen Graphics
+
+The Screen class provides pixel-level drawing. The screen is 512 x 256 pixels, memory-mapped at address 16384 (SCREEN). Each row is 32 words (512 bits).
+
+```jack
+class Screen {
+    function void drawPixel(int x, int y) {
+        // Compute word address and bit mask
+        // Write to screen memory map
+    }
+
+    function void drawLine(int x1, int y1, int x2, int y2) {
+        // Bresenham's line algorithm
+    }
+
+    function void drawRectangle(int x1, int y1, int x2, int y2) {
+        // Loop drawing horizontal lines
+    }
+
+    function void drawCircle(int cx, int cy, int r) {
+        // Midpoint circle algorithm
+    }
+}
+```
+
+## System Bootstrap
+
+The Sys class initializes the OS:
+
+```jack
+class Sys {
+    function void init() {
+        // Initialize all OS classes
+        do Math.init();
+        do Output.init();
+        do Screen.init();
+        do Keyboard.init();
+        do Memory.init();
+        // Start the user's program
+        do Main.main();
+        // Halt
+        do Sys.halt();
+    }
+}
+```
+
+:::video{platform="youtube" id="JtXvUoPx4Qs"}
+The final piece: the operating system that allows high-level Jack programs to interact with the hardware — completing the Nand to Tetris journey.
+:::
+
+## Think Critically
+
+:::evaluate{criteria="os-design"}
+
+### Why an OS in Jack?
+
+The entire OS is written in Jack, the same high-level language as user programs. What are the implications of this design choice? How does it differ from a real-world OS?
+
+### Criteria
+- Notes that a Jack-written OS is simpler and more portable than assembly
+- Recognizes performance costs of a high-level OS
+- Connects to the pedagogical goal: students can understand and modify the entire system
+:::
+
+## Project
+
+:::project{environment="node" template="nand2tetris-project12"}
+
+### Objective
+
+Implement the Jack OS standard library — all 8 modules.
+
+### Requirements
+1. Implement Math (multiply, divide, sqrt using efficient algorithms)
+2. Implement String (constructors, concatenation, comparison, substring)
+3. Implement Array (new, dispose)
+4. Implement Output (character and string printing to screen)
+5. Implement Screen (pixels, lines, rectangles, circles)
+6. Implement Keyboard (key press detection, character reading)
+7. Implement Memory (heap initialization, alloc, deAlloc using free list)
+8. Implement Sys (init, halt, error, wait, timer)
+
+### Hints
+- Free list management: each free block stores a pointer to the next block and its size
+- Multiplication: use shift-and-add (repeated shifting + conditional addition)
+- Screen: character glyphs are stored as 11x16 bitmaps in a hardcoded array
+- Test each OS module individually with the supplied test programs before integration
+- The OS tests are the most demanding — they require all modules to work together correctly
+:::
