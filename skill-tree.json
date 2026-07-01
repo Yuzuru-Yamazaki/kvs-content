@@ -1,40 +1,57 @@
 {
   "version": 1,
+  "fields": [
+    {
+      "id": "programming",
+      "title": "Programming",
+      "description": "Learn programming languages and fundamentals"
+    },
+    {
+      "id": "tools",
+      "title": "Tools & Workflow",
+      "description": "Essential developer tools and version control"
+    },
+    {
+      "id": "computer-science",
+      "title": "Computer Science",
+      "description": "Data structures, algorithms, and systems programming"
+    }
+  ],
   "nodes": [
     {
       "id": "intro-to-c",
       "title": "Intro to C",
       "description": "Learn the fundamentals of C programming.",
       "difficulty": "beginner",
-      "position": { "x": 0, "y": 0 }
+      "field": "programming"
     },
     {
       "id": "python-basics",
       "title": "Python Basics",
       "description": "Learn Python fundamentals.",
       "difficulty": "beginner",
-      "position": { "x": 1, "y": 0 }
+      "field": "programming"
     },
     {
       "id": "git-fundamentals",
       "title": "Git Fundamentals",
       "description": "Version control with Git.",
       "difficulty": "beginner",
-      "position": { "x": 2, "y": 0 }
+      "field": "tools"
     },
     {
       "id": "data-structures",
       "title": "Data Structures",
       "description": "Implement fundamental data structures in C.",
       "difficulty": "intermediate",
-      "position": { "x": 0.5, "y": 1 }
+      "field": "computer-science"
     },
     {
       "id": "advanced-systems",
       "title": "Advanced Systems",
       "description": "Advanced systems programming and compiler concepts.",
       "difficulty": "advanced",
-      "position": { "x": 0.5, "y": 2 }
+      "field": "computer-science"
     }
   ],
   "edges": [
