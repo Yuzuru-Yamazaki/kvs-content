@@ -1,0 +1,173 @@
+---
+course_id: "nand2tetris"
+chapter: 11
+title: "Compiler II: Code Generation"
+difficulty: "advanced"
+date_created: "2026-07-01"
+date_updated: "2026-07-01"
+creator: "Kvasir Team"
+description: "Extend the Jack compiler to generate VM code from high-level Jack programs."
+field: "computer-science"
+tags: ["nand2tetris", "compiler", "code-generation", "vm-translator"]
+---
+# Compiler II: Code Generation
+
+The second stage of the Jack compiler generates VM code from the parse tree. This is where high-level Jack constructs become low-level VM operations.
+
+## From Parse Tree to VM Code
+
+Each Jack construct maps to a sequence of VM commands:
+
+### Let Statement
+
+```jack
+let x = y + 5;
+```
+
+Becomes:
+```
+push y
+push 5
+add
+pop x
+```
+
+### Array Assignment
+
+```jack
+let a[i] = x;
+```
+
+Becomes:
+```
+push a
+push i
+add        // address = a + i
+push x
+pop temp 0 // store x
+pop pointer 1 // THAT = address
+push temp 0
+pop THAT 0  // write x to a[i]
+```
+
+### If-Else
+
+```jack
+if (x > 0) {
+    let pos = pos + 1;
+} else {
+    let neg = neg + 1;
+}
+```
+
+Becomes:
+```
+push x
+push 0
+gt
+not
+if-goto IF_FALSE0
+push pos
+push 1
+add
+pop pos
+goto IF_END0
+label IF_FALSE0
+push neg
+push 1
+add
+pop neg
+label IF_END0
+```
+
+### While Loop
+
+```jack
+while (i < n) {
+    let sum = sum + i;
+    let i = i + 1;
+}
+```
+
+Becomes:
+```
+label WHILE0
+push i
+push n
+lt
+not
+if-goto WHILE_END0
+push sum
+push i
+add
+pop sum
+push i
+push 1
+add
+pop i
+goto WHILE0
+label WHILE_END0
+```
+
+## Symbol Table
+
+The compiler maintains two symbol tables:
+
+- **Class-level**: class name, field and static variables
+- **Subroutine-level**: argument and local variables, plus the subroutine's name and type
+
+Each symbol entry tracks: name, type, kind (static/field/arg/var), and index (its position within that kind).
+
+## Handling Objects
+
+```
+constructor Square new(x, y, size)
+  // THIS = allocated memory from Memory.alloc
+  // fields accessed as THIS 0, THIS 1, THIS 2
+```
+
+```
+method void Square.draw()
+  // argument 0 = this (the object reference)
+  // fields accessed indirectly through THIS
+```
+
+:::video{platform="youtube" id="IlPj5Rg1y2w"}
+The compilation pipeline in action — how object-oriented Jack code flows through the compiler to the VM.
+:::
+
+## Think Critically
+
+:::evaluate{criteria="compiler-optimization"}
+
+### No optimization?
+
+The Jack compiler generates straightforward VM code with no optimization. What optimizations could you add? How would constant folding, dead code elimination, or peephole optimization improve the generated code?
+
+### Criteria
+- Proposes at least one concrete optimization and its effect
+- Recognizes that optimization increases compiler complexity
+- Considers the trade-off: simpler compiler vs. better code
+:::
+
+## Project
+
+:::project{environment="node" template="nand2tetris-project11"}
+
+### Objective
+
+Extend the Jack compiler to generate VM code from Jack source.
+
+### Requirements
+1. Implement the complete CompilationEngine with VM code generation
+2. Implement the SymbolTable for class-level and subroutine-level symbols
+3. Generate correct VM code for all Jack constructs: expressions, statements, arrays, objects, methods, constructors
+4. Handle the standard Jack OS library calls
+5. Test by compiling the Pong game and running it in the VM Emulator
+
+### Hints
+- Start with expressions, then statements, then add objects and arrays
+- Use the VM Emulator to debug your generated code
+- The supplied test programs can help verify each feature incrementally
+- Object field access uses pointer/THIS and pointer/THAT
+:::
