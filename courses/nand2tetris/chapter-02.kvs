@@ -1,0 +1,98 @@
+---
+course_id: "nand2tetris"
+chapter: 2
+title: "Boolean Arithmetic and the ALU"
+difficulty: "beginner"
+date_created: "2026-07-01"
+date_updated: "2026-07-01"
+creator: "Kvasir Team"
+description: "Build adders and the Arithmetic Logic Unit — the calculating brain of the Hack computer."
+field: "computer-science"
+tags: ["nand2tetris", "arithmetic", "alu", "hardware", "hdl"]
+---
+# Boolean Arithmetic and the ALU
+
+Computers represent numbers in binary and perform arithmetic using logic gates. In this chapter, we build a family of adder chips culminating in the **Arithmetic Logic Unit (ALU)** — the calculating brain of the CPU.
+
+## Binary Numbers
+
+In binary, each digit is a power of 2:
+
+```
+1101 = 1x8 + 1x4 + 0x2 + 1x1 = 13
+```
+
+For negative numbers, we use **two's complement**: -x = 2^n - x. Addition and subtraction share the same hardware.
+
+## Half Adder
+
+Adds two bits, producing sum and carry:
+
+```hdl
+CHIP HalfAdder {
+    IN a, b;
+    OUT sum, carry;
+    PARTS:
+    Xor(a=a, b=b, out=sum);
+    And(a=a, b=b, out=carry);
+}
+```
+
+## Full Adder
+
+Adds three bits (two inputs plus carry-in):
+
+```hdl
+CHIP FullAdder {
+    IN a, b, c;
+    OUT sum, carry;
+    PARTS:
+    HalfAdder(a=a, b=b, sum=s1, carry=c1);
+    HalfAdder(a=s1, b=c, sum=sum, carry=c2);
+    Or(a=c1, b=c2, out=carry);
+}
+```
+
+## The ALU
+
+The Hack ALU is controlled by six control bits (zx, nx, zy, ny, f, no). It computes 18 different functions on two 16-bit inputs, including 0, 1, -1, x, y, !x, !y, -x, -y, x+1, y+1, x-1, y-1, x+y, x-y, y-x, x&y, and x|y.
+
+The ALU also outputs **zr** (out=0) and **ng** (out<0) status bits.
+
+:::video{platform="youtube" id="gI-qXk7XojA"}
+Crash Course Computer Science explains how Boolean logic gates combine to perform arithmetic.
+:::
+
+## Think Critically
+
+:::evaluate{criteria="alu-design"}
+
+### Why these control bits?
+
+The ALU uses exactly six control bits. Could we have used fewer? What trade-offs exist between the number of control bits and the complexity of the ALU's internal logic?
+
+### Criteria
+- Analyzes the relationship between control bits and function space
+- Considers hardware complexity vs. instruction width trade-off
+- Recognizes that fewer control bits would require more internal logic
+:::
+
+## Project
+
+:::project{environment="node" template="nand2tetris-project2"}
+
+### Objective
+
+Build the ALU and all supporting adder chips for the Hack computer.
+
+### Requirements
+1. Implement HalfAdder, FullAdder, Add16, Inc16
+2. Implement the ALU (first without zr/ng, then with them)
+3. Pass all supplied test scripts
+4. Your ALU must compute all 18 documented functions correctly
+
+### Hints
+- Build the ALU in two stages: first the 16-bit output, then add zr/ng
+- Use built-in versions of chips from Project 1 to keep simulation fast
+- The ALU is purely combinational — no clock, no memory
+:::
