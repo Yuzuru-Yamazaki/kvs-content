@@ -7,6 +7,7 @@ date_created: "2026-06-01"
 date_updated: "2026-06-04"
 creator: "Kvasir Team"
 description: "Write your first Python program and learn about variables, data types, and basic input/output."
+tags: ["python", "programming", "beginner"]
 ---
 
 # Getting Started with Python
