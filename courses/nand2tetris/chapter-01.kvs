@@ -1,0 +1,118 @@
+---
+course_id: "nand2tetris"
+chapter: 1
+title: "Boolean Logic and Gates"
+difficulty: "beginner"
+date_created: "2026-07-01"
+date_updated: "2026-07-01"
+creator: "Kvasir Team"
+description: "Build elementary logic gates from a single Nand primitive, introducing Boolean algebra and hardware description language (HDL)."
+field: "computer-science"
+tags: ["nand2tetris", "boolean-logic", "hardware", "hdl", "computer-architecture"]
+---
+# Boolean Logic and Gates
+
+Every digital computer is built from tiny switches called transistors, which implement Boolean functions — functions that operate on true/false (1/0) values. In Nand to Tetris, we start with one primitive gate — **Nand** — and build every other gate from it.
+
+## What is Boolean Logic?
+
+Boolean algebra has three fundamental operations: **NOT**, **AND**, and **OR**. Truth tables define their behavior:
+
+| a | b | AND | OR | NAND |
+|---|---|-----|----|------|
+| 0 | 0 |  0  | 0  |  1   |
+| 0 | 1 |  0  | 1  |  1   |
+| 1 | 0 |  0  | 1  |  1   |
+| 1 | 1 |  1  | 1  |  0   |
+
+Any Boolean function can be expressed using Nand alone — this property is called **functional completeness**.
+
+## The Nand Gate
+
+In HDL (Hardware Description Language), a Nand gate is our primitive building block:
+
+```hdl
+CHIP Nand {
+    IN a, b;
+    OUT out;
+    // Built-in primitive
+}
+```
+
+## Building Not from Nand
+
+```
+Not(x) = Nand(x, x)
+```
+
+```hdl
+CHIP Not {
+    IN in;
+    OUT out;
+    PARTS:
+    Nand(a=in, b=in, out=out);
+}
+```
+
+## Building And from Nand
+
+```
+And(a, b) = Not(Nand(a, b))
+```
+
+```hdl
+CHIP And {
+    IN a, b;
+    OUT out;
+    PARTS:
+    Nand(a=a, b=b, out=nandOut);
+    Not(in=nandOut, out=out);
+}
+```
+
+## Multiplexor and Demultiplexor
+
+A **Mux** selects between two inputs based on a selector bit. A **DMux** sends one input to one of two outputs. These are the routing switches of the computer.
+
+## Multi-Bit and Multi-Way Gates
+
+Gates like Not16, And16, Or16 operate on 16-bit buses. Multi-way gates like Mux4Way16, Mux8Way16, DMux4Way, and DMux8Way handle multiple input lines.
+
+:::video{platform="youtube" id="JtXvUoPx4Qs"}
+Shimon Schocken introduces the Nand to Tetris journey — from a single Nand gate to a complete computer running Tetris.
+:::
+
+## Think Critically
+
+:::evaluate{criteria="functional-completeness"}
+
+### Why start with Nand?
+
+The book starts with Nand as the only primitive gate. Why not start with And, Or, and Not separately? What special property does Nand have that makes it sufficient on its own?
+
+### Criteria
+- Explains functional completeness of Nand
+- Recognizes that Nand alone can implement any Boolean function
+- Describes the minimalist philosophy of the course
+:::
+
+## Project
+
+:::project{environment="node" template="nand2tetris-project1"}
+
+### Objective
+
+Build all 15 elementary logic gates in HDL, from Nand up through Mux8Way16.
+
+### Requirements
+1. Implement Not, And, Or, Xor from Nand
+2. Implement Mux and DMux
+3. Implement 16-bit versions: Not16, And16, Or16, Mux16
+4. Implement multi-way gates: Or8Way, Mux4Way16, Mux8Way16, DMux4Way, DMux8Way
+5. Test each gate using the supplied hardware simulator
+
+### Hints
+- Use the built-in Nand chip — don't implement it yourself
+- Test each gate before moving to the next
+- Multi-bit gates process all bits in parallel
+:::
