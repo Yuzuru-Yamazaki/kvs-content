@@ -1,0 +1,99 @@
+---
+course_id: "nand2tetris"
+chapter: 5
+title: "Computer Architecture"
+difficulty: "intermediate"
+date_created: "2026-07-01"
+date_updated: "2026-07-01"
+creator: "Kvasir Team"
+description: "Assemble the CPU from built chips, connect memory and I/O, and create a complete computer."
+field: "computer-science"
+tags: ["nand2tetris", "architecture", "cpu", "hardware"]
+---
+# Computer Architecture
+
+Now we assemble the CPU from the chips we built earlier, connect it to memory, and create a complete computer that can run machine-language programs.
+
+## The Hack CPU
+
+The CPU must:
+1. **Fetch**: read the next instruction from instruction memory (ROM)
+2. **Decode**: determine if it's an A or C instruction
+3. **Execute**: perform the computation, update registers, and compute the next program counter
+
+```hdl
+CHIP CPU {
+    IN  inM[16],         // input from memory
+        instruction[16], // instruction from ROM
+        reset;           // reset signal
+    OUT outM[16],        // output to memory
+        writeM,          // write-enable for memory
+        addressM[15],    // address for memory
+        pc[15];          // program counter output
+    PARTS:
+    // Implementation decodes instruction,
+    // controls ALU, registers, and PC
+}
+```
+
+## The Hack Computer
+
+The `Computer` chip integrates the CPU with a ROM32K (instruction memory) and a Memory chip (data memory and screen/keyboard maps).
+
+```
+                 +--------+
+  ROM ---------> |  CPU   | <-----> Memory (RAM + I/O)
+                 |        | +------> Screen, Keyboard
+                 +--------+
+```
+
+## Memory Map
+
+The 16-bit address space is partitioned:
+
+| Address range | Contents            |
+|--------------|---------------------|
+| 0x0000-0x3FFF | RAM (16K words)     |
+| 0x4000-0x5FFF | Screen memory map   |
+| 0x6000       | Keyboard input      |
+
+The Screen and Keyboard are memory-mapped — writing to the screen address range changes pixels on the display, and reading the keyboard address returns the currently pressed key.
+
+:::video{platform="youtube" id="IlPj5Rg1y2w"}
+See how the CPU, memory, and I/O integrate into a complete computer system.
+:::
+
+## Think Critically
+
+:::evaluate{criteria="architecture-design"}
+
+### Von Neumann vs. Harvard
+
+The Hack computer uses a Harvard architecture (separate instruction and data memories) even though the book famously calls it a "von Neumann machine." What distinction is being made? Why separate ROM and RAM?
+
+### Criteria
+- Correctly identifies Hack as Harvard (separate instruction/data)
+- Explains the von Neumann vs. Harvard distinction
+- Discusses simplicity benefits of separate memories for this course
+:::
+
+## Project
+
+:::project{environment="node" template="nand2tetris-project5"}
+
+### Objective
+
+Build the complete Hack computer: CPU, Memory, and Computer chips.
+
+### Requirements
+1. Implement the CPU chip in HDL
+2. Implement the Memory chip (combining RAM16K, Screen, and Keyboard)
+3. Implement the top-level Computer chip
+4. Test the computer running the programs from Project 4
+
+### Hints
+- The CPU is the most complex chip — build it incrementally
+- Start with A-instruction handling, then add C-instruction execution
+- The PC logic needs to handle reset, jumps, and increments
+- Memory uses address decoding to route reads/writes to RAM, Screen, or Keyboard
+:::
