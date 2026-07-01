@@ -1,0 +1,118 @@
+---
+course_id: "nand2tetris"
+chapter: 10
+title: "Compiler I: Syntax Analysis"
+difficulty: "advanced"
+date_created: "2026-07-01"
+date_updated: "2026-07-01"
+creator: "Kvasir Team"
+description: "Build a tokenizer and recursive-descent parser that outputs an XML parse tree for Jack."
+field: "computer-science"
+tags: ["nand2tetris", "compiler", "parsing", "syntax-analysis"]
+---
+# Compiler I: Syntax Analysis
+
+The first stage of the Jack compiler is the **syntax analyzer** (tokenizer + parser). It reads Jack source code and produces a parse tree, typically output as XML.
+
+## Jack Grammar (simplified)
+
+```
+program          -> classDec
+classDec         -> 'class' className '{' classVarDec* subroutineDec* '}'
+classVarDec      -> ('static'|'field') type varName (',' varName)* ';'
+type             -> 'int' | 'boolean' | 'char' | className
+subroutineDec    -> ('constructor'|'function'|'method') ('void'|type)
+                    subName '(' paramList ')' subroutineBody
+subroutineBody   -> '{' varDec* statements '}'
+varDec           -> 'var' type varName (',' varName)* ';'
+statements       -> statement*
+statement        -> letStatement | ifStatement | whileStatement
+                    | doStatement | returnStatement
+letStatement     -> 'let' varName ('[' expression ']')? '=' expression ';'
+ifStatement      -> 'if' '(' expression ')' '{' statements '}'
+                    ('else' '{' statements '}')?
+whileStatement   -> 'while' '(' expression ')' '{' statements '}'
+doStatement      -> 'do' subroutineCall ';'
+returnStatement  -> 'return' expression? ';'
+expression       -> term (op term)*
+term             -> integerConstant | stringConstant | keywordConstant
+                    | varName | varName '[' expression ']'
+                    | subroutineCall | '(' expression ')' | unaryOp term
+```
+
+## Tokenizer
+
+The tokenizer breaks source text into tokens:
+
+```jack
+// Input: let x = 15 + y;
+// Tokens:
+// <keyword> let </keyword>
+// <identifier> x </identifier>
+// <symbol> = </symbol>
+// <integerConstant> 15 </integerConstant>
+// <symbol> + </symbol>
+// <identifier> y </identifier>
+// <symbol> ; </symbol>
+```
+
+Token types: keyword, symbol, integerConstant, stringConstant, identifier.
+
+## Recursive Descent Parsing
+
+The parser uses recursive descent — one method per grammar rule:
+
+```python
+class JackAnalyzer:
+    def compile_class(self):
+        self.eat('class')
+        className = self.eatIdentifier()
+        self.eat('{')
+        while self.peek() in ('static', 'field'):
+            self.compile_class_var_dec()
+        while self.peek() in ('constructor', 'function', 'method'):
+            self.compile_subroutine_dec()
+        self.eat('}')
+```
+
+Each `compileX` method consumes tokens according to the grammar rule and outputs the corresponding XML.
+
+:::video{platform="youtube" id="UvI-AMAtrvE"}
+Understanding parse trees and how programming language syntax is analyzed — fundamental to building a compiler.
+:::
+
+## Think Critically
+
+:::evaluate{criteria="parsing-strategies"}
+
+### Recursive descent vs. other approaches
+
+The Jack compiler uses recursive descent parsing. What makes this approach suitable for a course project? When would a parser generator (like yacc/bison) be more appropriate?
+
+### Criteria
+- Explains recursive descent as hand-coded, intuitive, educational
+- Identifies limitations: harder to maintain for complex grammars
+- Recognizes that parser generators are better for production-quality compilers
+:::
+
+## Project
+
+:::project{environment="node" template="nand2tetris-project10"}
+
+### Objective
+
+Build the Jack syntax analyzer: a tokenizer and parser that outputs an XML parse tree.
+
+### Requirements
+1. Implement the JackTokenizer (produces tokens from .jack files)
+2. Implement the CompilationEngine using recursive descent parsing
+3. Output structured XML showing the parse tree
+4. Handle all Jack language constructs
+5. Test by comparing output with the supplied XML compare files
+
+### Hints
+- Build the tokenizer first and test it independently
+- Each compileX method in the parser outputs an opening XML tag, processes its grammar rule, then outputs a closing tag
+- The supplied test programs have expected XML output files
+- Ignore whitespace — the tokenizer strips it
+:::
