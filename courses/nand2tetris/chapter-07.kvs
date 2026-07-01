@@ -1,0 +1,115 @@
+---
+course_id: "nand2tetris"
+chapter: 7
+title: "Virtual Machine I: Stack Arithmetic"
+difficulty: "advanced"
+date_created: "2026-07-01"
+date_updated: "2026-07-01"
+creator: "Kvasir Team"
+description: "Build a VM translator that converts stack arithmetic and memory access commands into assembly."
+field: "computer-science"
+tags: ["nand2tetris", "virtual-machine", "stack", "vm-translator"]
+---
+# Virtual Machine I: Stack Arithmetic
+
+The Virtual Machine (VM) is an intermediate layer between high-level languages and the Hack platform. It models a stack-based computer, making it easy to compile to and simple to translate to assembly.
+
+## The Stack Model
+
+A stack is a LIFO (Last-In-First-Out) data structure with two fundamental operations:
+- **push** — place a value on top
+- **pop** — remove the top value
+
+The VM uses a stack for all arithmetic and logical operations:
+
+```
+push 5          push 3          add
+[ ]             [ ]             [ ]
+[ ]             [ ]             [ ]
+[ ]             [ ]             [ ]
+[5]             [3]             [8]
+                [5]
+```
+
+## VM Arithmetic Commands
+
+| Command     | Effect                    |
+|-------------|---------------------------|
+| add         | pop x, pop y, push y+x   |
+| sub         | pop x, pop y, push y-x   |
+| neg         | pop x, push -x           |
+| eq          | pop x, pop y, push (y==x)|
+| gt          | pop x, pop y, push (y>x) |
+| lt          | pop x, pop y, push (y<x) |
+| and         | pop x, pop y, push y&x   |
+| or          | pop x, pop y, push y|x   |
+| not         | pop x, push !x           |
+
+## Memory Segments
+
+The VM also handles memory access through named segments:
+
+| Segment    | Purpose                       | Mapped to        |
+|------------|-------------------------------|------------------|
+| constant   | constant values 0-32767       | built-in         |
+| argument   | function arguments            | RAM[ARG]+offset  |
+| local      | local variables               | RAM[LCL]+offset  |
+| static     | global static variables       | RAM[16+offset]   |
+| this/that  | pointer-based heap access     | RAM[THIS/THAT]+offset |
+| temp       | temporary storage (8 slots)   | RAM[5+offset]    |
+| pointer    | access THIS/THAT registers    | RAM[3+offset]    |
+
+## Push and Pop Implementation
+
+Each VM command translates to several assembly instructions. For example:
+
+```
+push constant 5
+// becomes:
+@5              // A = 5
+D=A             // D = 5
+@SP             // A = stack pointer address
+A=M             // A = current stack top
+M=D             // write value to stack
+@SP             // increment SP
+M=M+1
+```
+
+:::video{platform="youtube" id="qud_r6NDdrs"}
+A visual explanation of stack-based virtual machines and how they bridge high-level languages and hardware.
+:::
+
+## Think Critically
+
+:::evaluate{criteria="stack-vs-register"}
+
+### Stack VM vs. Register VM
+
+The Hack VM uses a stack architecture (like the JVM), while real CPUs typically use registers. What are the trade-offs? Why might a course project choose a stack VM?
+
+### Criteria
+- Identifies stack VM simplicity for code generation
+- Notes performance trade-off (more instructions needed)
+- Explains compiler-friendliness of stack-based intermediate representation
+:::
+
+## Project
+
+:::project{environment="node" template="nand2tetris-project7"}
+
+### Objective
+
+Build the first part of the VM translator: translate stack arithmetic and memory access commands into Hack assembly.
+
+### Requirements
+1. Implement the Parser (reads VM commands, strips comments/whitespace)
+2. Implement the CodeWriter (generates assembly for push/pop and arithmetic/logical commands)
+3. Support all memory segments: constant, argument, local, static, this, that, temp, pointer
+4. Support all arithmetic/logical commands: add, sub, neg, eq, gt, lt, and, or, not
+5. Test with the supplied .vm programs using the CPU Emulator
+
+### Hints
+- The stack pointer SP is at RAM[0]
+- The eq/gt/lt commands require conditional branching in assembly
+- Use the built-in VM Emulator to debug your VM programs before testing your translator
+:::
