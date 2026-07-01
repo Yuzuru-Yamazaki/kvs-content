@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "nodes": [
+    {
+      "id": "intro-to-c",
+      "title": "Intro to C",
+      "description": "Learn the fundamentals of C programming.",
+      "difficulty": "beginner",
+      "position": { "x": 0, "y": 0 }
+    },
+    {
+      "id": "python-basics",
+      "title": "Python Basics",
+      "description": "Learn Python fundamentals.",
+      "difficulty": "beginner",
+      "position": { "x": 1, "y": 0 }
+    },
+    {
+      "id": "git-fundamentals",
+      "title": "Git Fundamentals",
+      "description": "Version control with Git.",
+      "difficulty": "beginner",
+      "position": { "x": 2, "y": 0 }
+    },
+    {
+      "id": "data-structures",
+      "title": "Data Structures",
+      "description": "Implement fundamental data structures in C.",
+      "difficulty": "intermediate",
+      "position": { "x": 0.5, "y": 1 }
+    },
+    {
+      "id": "advanced-systems",
+      "title": "Advanced Systems",
+      "description": "Advanced systems programming and compiler concepts.",
+      "difficulty": "advanced",
+      "position": { "x": 0.5, "y": 2 }
+    }
+  ],
+  "edges": [
+    { "from": "intro-to-c", "to": "data-structures" },
+    { "from": "python-basics", "to": "data-structures" },
+    { "from": "data-structures", "to": "advanced-systems" }
+  ]
+}
