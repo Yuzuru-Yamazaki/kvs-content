@@ -1,0 +1,12 @@
+{
+  "courses": [
+    {
+      "id": "advanced-systems",
+      "title": "Advanced Systems Programming",
+      "description": "Register allocation, memory safety, lock-free data structures, cache-oblivious algorithms, and a capstone design challenge.",
+      "chapters": 5,
+      "bloom_levels": ["evaluate", "create"],
+      "difficulty": "advanced"
+    }
+  ]
+}
