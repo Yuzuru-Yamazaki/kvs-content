@@ -1,0 +1,166 @@
+---
+course_id: "nand2tetris"
+chapter: 4
+title: "Machine Language"
+difficulty: "intermediate"
+date_created: "2026-07-01"
+date_updated: "2026-07-01"
+creator: "Kvasir Team"
+description: "Learn the Hack instruction set and write assembly programs for multiplication and screen control."
+field: "computer-science"
+tags: ["nand2tetris", "assembly", "machine-language", "programming"]
+---
+# Machine Language
+
+Before we build the CPU, we need to understand the language it speaks. The Hack machine language has two instruction types: **A-instructions** (address) and **C-instructions** (compute).
+
+## Memory and Registers
+
+The Hack platform has two 16-bit registers:
+- **D register** — stores data values
+- **A register** — stores addresses (also used for data)
+
+The **M** symbol refers to the memory word at the address stored in A.
+
+## A-Instruction
+
+Sets the A register to a 15-bit value:
+
+```
+@value      // A = value
+```
+
+Examples:
+```asm
+@5          // A = 5
+@sum        // A = address of label 'sum'
+@R0         // A = 0 (R0-R15 are aliases for RAM[0..15])
+```
+
+## C-Instruction
+
+Computes and stores a value. Format: `dest = comp ; jump`
+
+```
+dest = comp ; jump
+  ^      ^      ^
+  where  what   when to jump
+```
+
+### Computation (comp)
+
+| comp  | value    | comp   | value     |
+|-------|----------|--------|-----------|
+| 0     | 0        | D+1    | D+1       |
+| 1     | 1        | A+1    | A+1       |
+| -1    | -1       | D-1    | D-1       |
+| D     | D        | A-1    | A-1       |
+| A     | A        | D+A    | D+A       |
+| !D    | not D    | D-A    | D-A       |
+| !A    | not A    | A-D    | A-D       |
+| -D    | -D       | D&A    | D and A   |
+| -A    | -A       | D|A    | D or A    |
+
+When A is replaced with M, the operation reads from memory.
+
+### Destination (dest)
+
+| dest | stores to  |
+|------|------------|
+| null | nothing    |
+| M    | RAM[A]     |
+| D    | D register |
+| MD   | RAM[A] and D |
+| A    | A register |
+
+### Jump (jump)
+
+| jump | condition    |
+|------|-------------|
+| JGT  | if out > 0  |
+| JEQ  | if out = 0  |
+| JGE  | if out >= 0 |
+| JLT  | if out < 0  |
+| JNE  | if out != 0 |
+| JLE  | if out <= 0 |
+| JMP  | unconditional |
+
+## Programming Example
+
+```asm
+// Compute RAM[2] = RAM[0] + RAM[1]
+@0
+D=M          // D = RAM[0]
+@1
+D=D+M        // D = RAM[0] + RAM[1]
+@2
+M=D          // RAM[2] = sum
+```
+
+## Branching and Loops
+
+```asm
+// Compute sum of 1 to n, store in RAM[1]
+@n
+D=M          // D = n
+@i
+M=1          // i = 1
+@sum
+M=0          // sum = 0
+(LOOP)
+@i
+D=M
+@n
+D=D-M        // i - n
+@END
+D;JGT        // if i > n goto END
+@i
+D=M
+@sum
+M=M+D        // sum += i
+@i
+M=M+1        // i++
+@LOOP
+0;JMP        // unconditional jump
+(END)
+@END
+0;JMP
+```
+
+:::video{platform="youtube" id="IlPj5Rg1y2w"}
+The Google Tech Talk overview covers how machine language instructions control the hardware.
+:::
+
+## Think Critically
+
+:::evaluate{criteria="instruction-set-design"}
+
+### Why only two instruction types?
+
+The Hack instruction set has just A-instructions and C-instructions, far fewer than a modern x86 or ARM CPU. What are the advantages and disadvantages of a minimal instruction set?
+
+### Criteria
+- Identifies simplicity / ease of implementation benefits
+- Considers code density and program size trade-offs
+- Recognizes that a minimal ISA makes the assembler and compiler easier to build
+:::
+
+## Project
+
+:::project{environment="node" template="nand2tetris-project4"}
+
+### Objective
+
+Write assembly programs for the Hack computer: a multiplication program and a screen-fill program.
+
+### Requirements
+1. Write Mult.asm: multiplies RAM[0] and RAM[1], stores result in RAM[2]
+2. Write Fill.asm: fills the screen black when a key is pressed, white when released
+3. Use only the Hack assembly instructions
+4. Test using the CPU Emulator
+
+### Hints
+- Multiplication can be done by repeated addition
+- Screen memory starts at address 16384 (SCREEN)
+- Keyboard input is at address 24576 (KBD)
+:::
