@@ -7,6 +7,7 @@ date_created: "2026-06-05"
 date_updated: "2026-06-10"
 creator: "Kvasir Team"
 description: "Implement singly and doubly linked lists with insertion, deletion, and traversal operations."
+field: "computer-science"
 tags: ["c", "data-structures", "intermediate"]
 ---
 

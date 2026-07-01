@@ -7,6 +7,7 @@ date_created: "2026-06-01"
 date_updated: "2026-06-05"
 creator: "Kvasir Team"
 description: "Learn about C's basic data types, variable declarations, and how data is stored in memory."
+field: "programming"
 tags: ["c", "programming", "beginner"]
 ---
 
