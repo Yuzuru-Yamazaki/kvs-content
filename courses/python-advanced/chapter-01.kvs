@@ -1,0 +1,76 @@
+---
+course_id: "python-advanced"
+chapter: 1
+title: "OOP and Decorators"
+difficulty: "intermediate"
+date_created: "2026-07-01"
+date_updated: "2026-07-01"
+creator: "Kvasir Team"
+description: "Master object-oriented programming in Python: classes, inheritance, decorators, and context managers."
+field: "programming"
+dependsOn: ["python-basics"]
+tags: ["python", "oop", "intermediate"]
+---
+
+# OOP and Decorators
+
+Python supports both functional and object-oriented programming. This chapter covers classes, inheritance, decorators, and context managers.
+
+## Classes and Objects
+
+```python
+class Dog:
+    def __init__(self, name: str, age: int):
+        self.name = name
+        self.age = age
+
+    def bark(self) -> str:
+        return f"{self.name} says woof!"
+
+    def human_years(self) -> int:
+        return self.age * 7
+```
+
+## Inheritance
+
+```python
+class Puppy(Dog):
+    def __init__(self, name: str, age: int, toy: str):
+        super().__init__(name, age)
+        self.toy = toy
+
+    def play(self) -> str:
+        return f"{self.name} plays with {self.toy}"
+```
+
+## Decorators
+
+```python
+from functools import wraps
+import time
+
+def timer(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        result = func(*args, **kwargs)
+        elapsed = time.perf_counter() - start
+        print(f"{func.__name__} took {elapsed:.4f}s")
+        return result
+    return wrapper
+
+@timer
+def slow_add(a: int, b: int) -> int:
+    return a + b
+```
+
+## Challenge
+
+Write a class `BankAccount` with deposit, withdraw, and balance methods. Add a decorator `log_transaction` that logs every transaction.
+
+:::project{environment="node" template="python-oop-lab"}
+
+### Objective
+
+Build a simple banking system with `BankAccount`, `SavingsAccount` (inherits), and a `log_transaction` decorator.
+:::
